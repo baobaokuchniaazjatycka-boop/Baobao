@@ -526,14 +526,7 @@ function orderWhatsApp(){
   window.open("https://wa.me/48694189888?text=" + text, "_blank");
 }
 
-function orderEmail(){
-  let subject = "Zamówienie BAO BAO";
-  let body = getOrderText().replace(/%0A/g, "\n");
-  window.location.href =
-    "mailto:baobaokuchniaazjatycka@gmail.com?subject=" +
-    encodeURIComponent(subject) +
-    "&body=" + encodeURIComponent(body);
-}
+
   function getOrderText(){
   let items = document.getElementById("cartItems").innerText;
   let total = document.getElementById("total").innerText;
