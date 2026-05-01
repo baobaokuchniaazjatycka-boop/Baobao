@@ -564,6 +564,29 @@ function orderEmail(){
          "%0A%0ARazem: " + total + " zł";
 }
   
+window.onload = function(){
+  let cartBtn = document.getElementById("openCartBtn");
 
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  cartBtn.addEventListener("touchstart", e => {
+    isDragging = true;
+    let touch = e.touches[0];
+    offsetX = touch.clientX - cartBtn.offsetLeft;
+    offsetY = touch.clientY - cartBtn.offsetTop;
+  });
+
+  cartBtn.addEventListener("touchmove", e => {
+    if (!isDragging) return;
+    let touch = e.touches[0];
+    cartBtn.style.left = (touch.clientX - offsetX) + "px";
+    cartBtn.style.top = (touch.clientY - offsetY) + "px";
+  });
+
+  cartBtn.addEventListener("touchend", () => {
+    isDragging = false;
+  });
+  }
 </script><button id="openCartBtn" onclick="openCart()">🛒</button></body>
 </html>
