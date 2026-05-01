@@ -44,7 +44,19 @@ font-size:18px;
 background:red;
 animation:glow 1.2s infinite;
 }
-
+#openCartBtn{
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ff6600;
+  color: white;
+  font-size: 24px;
+  border: none;
+  z-index: 9999;
+}
 .map-btn{
 background:#2196f3;
 text-decoration:none;
@@ -551,5 +563,31 @@ function orderEmail(){
          "%0AUwagi: " + note +
          "%0A%0ARazem: " + total + " zł";
 }
+  
+
+<button id="openCartBtn" onclick="openCart()">🛒</button>
+
+let cartBtn = document.getElementById("openCartBtn");
+
+let isDragging = false;
+let offsetX, offsetY;
+
+cartBtn.addEventListener("touchstart", e => {
+  isDragging = true;
+  let touch = e.touches[0];
+  offsetX = touch.clientX - cartBtn.offsetLeft;
+  offsetY = touch.clientY - cartBtn.offsetTop;
+});
+
+cartBtn.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+  let touch = e.touches[0];
+  cartBtn.style.left = (touch.clientX - offsetX) + "px";
+  cartBtn.style.top = (touch.clientY - offsetY) + "px";
+});
+
+cartBtn.addEventListener("touchend", () => {
+  isDragging = false;
+});
 </script></body>
 </html>
