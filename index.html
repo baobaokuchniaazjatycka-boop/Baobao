@@ -473,18 +473,25 @@ document.getElementById("cartPopup").style.display="flex";
 function closeCart(){
 document.getElementById("cartPopup").style.display="none";
 }
+  
+function getOrderText(){
+  let items = document.getElementById("cartItems").innerText;
+  let total = document.getElementById("total").innerText;
+  return "Zamówienie:%0A" + items + "%0A%0ARazem: " + total + " zł";
+}
 
-function order(){
-let text="Zamówienie:%0A";
+function orderWhatsApp(){
+  let text = getOrderText();
+  window.open("https://wa.me/48649189888?text=" + text, "_blank");
+}
 
-cart.forEach(i=>{
-text+=`${i.name} x${i.qty}%0A`;
-});
-
-text+=`Tryb: ${mode}%0A`;
-text+=`Suma: ${document.getElementById("total").innerText} zł`;
-
-window.open(`https://wa.me/${phone}?text=${text}`);
+function orderEmail(){
+  let subject = "Zamówienie BAO BAO";
+  let body = getOrderText().replace(/%0A/g, "\n");
+  window.location.href =
+    "mailto:baobaokuchniaazjatycka@gmail.com?subject=" +
+    encodeURIComponent(subject) +
+    "&body=" + encodeURIComponent(body);
 }
 </script></body>
 </html>
