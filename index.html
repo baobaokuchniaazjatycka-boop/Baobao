@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAO BAO</title><style>
+body{
+margin:0;
+font-family:Arial;
+color:white;
+background:url('bg.jpg') center/cover fixed;
+}
+
+/* INTRO */
+#intro{
+position:fixed;
+width:100%;
+height:100%;
+background:url('intro.jpg') center/cover;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+padding-bottom:80px;
+z-index:999;
+}
+
+.intro-btn{
+display:flex;
+gap:10px;
+}
+
+.intro-btn button,
+.map-btn{
+padding:15px 25px;
+margin:10px;
+border:none;
+border-radius:10px;
+color:white;
+font-size:18px;
+}
+
+/* BUTTON COLORS */
+.intro-btn button{
+background:red;
+animation:glow 1.2s infinite;
+}
+
+.map-btn{
+background:#2196f3;
+text-decoration:none;
+animation:mapGlow 1.2s infinite;
+}
+
+/* MENU */
+#menu{display:none;padding:15px;}
+
+.category-box{
+margin:20px 0;
+padding:15px;
+border-radius:20px;
+background:rgba(0,0,0,0.55);
+backdrop-filter:blur(12px);
+border:2px solid;
+box-shadow:0 0 15px rgba(255,255,255,0.1);
+}
+
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,0.7);
+margin:8px 0;
+padding:10px;
+border-radius:10px;
+}
+
+/* +/- */
+.qty{
+display:flex;
+gap:8px;
+align-items:center;
+}
+.qty button{
+width:32px;height:32px;
+border:none;border-radius:8px;
+background:#ff5722;color:white;
+font-weight:bold;
+font-size:18px;
+}
+
+/* TABS */
+#tabs{
+position:sticky;
+top:0;
+background:black;
+padding:10px;
+display:flex;
+overflow:auto;
+z-index:5;
+}
+#tabs button{
+margin:5px;
+padding:10px;
+border:none;
+border-radius:20px;
+color:white;
+white-space:nowrap;
+}
+
+/* CART BTN */
+#openCartBtn{
+position:fixed;
+top:15px;
+right:15px;
+background:black;
+color:#fff;
+padding:10px 15px;
+border:none;
+border-radius:10px;
+z-index:1000;
+animation:glow 2s infinite;
+}
+
+/* POPUP */
+#cartPopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+.cart-box{
+background:#111;
+padding:20px;
+border-radius:15px;
+width:90%;
+max-height:80%;
+overflow:auto;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin:10px 0;
+}
+
+/* ADS */
+#ads{
+position:fixed;
+bottom:0;
+width:100%;
+text-align:center;
+background:black;
+color:red;
+padding:10px;
+border:2px solid red;
+animation:blink 1s infinite;
+}
+
+/* CONTACT */
+.contact{
+text-align:center;
+margin:20px;
+}
+.contact a{
+display:block;
+margin:10px;
+padding:10px;
+background:#111;
+border-radius:10px;
+color:white;
+text-decoration:none;
+}
+
+/* ANIMATION */
+@keyframes glow{
+0%{box-shadow:0 0 10px red;}
+50%{box-shadow:0 0 20px yellow;}
+100%{box-shadow:0 0 10px red;}
+}
+
+@keyframes mapGlow{
+0%{box-shadow:0 0 10px #2196f3;}
+50%{box-shadow:0 0 25px #00e5ff;}
+100%{box-shadow:0 0 10px #2196f3;}
+}
+
+@keyframes blink{
+0%{border-color:red;}
+50%{border-color:yellow;}
+100%{border-color:red;}
+}
+</style></head><body><!-- INTRO --><div id="intro">
+<div class="intro-btn"><button onclick="start('odbior')">ODBIÓR</button>
+
+<a class="map-btn" href="https://maps.google.com/?q=Tarnowskie Góry Jana III Sobieskiego 2B" target="_blank">
+📍 MAPA
+</a><button onclick="start('dostawa')">DOSTAWA</button>
+
+</div>
+</div><!-- CART BTN --><button id="openCartBtn" onclick="openCart()">🛒 (<span id="count">0</span>)</button>
+
+<!-- CART --><div id="cartPopup">
+<div class="cart-box">
+<h2>🛒 Twoje zamówienie</h2>
+<div id="cartItems"></div>
+<b>Razem: <span id="total">0</span> zł</b><br><br>
+<button onclick="order()">Zamów przez WhatsApp</button>
+<button onclick="closeCart()">Zamknij</button>
+</div>
+</div><div id="tabs"></div>
+<div id="menu"></div><div class="contact">
+<a href="https://maps.google.com/?q=Tarnowskie Góry Jana III Sobieskiego 2B" target="_blank">📍 Google Maps</a>
+<a href="mailto:baobaokuchniaazjatycka@gmail.com">📧 Email</a>
+</div><div id="ads">🔥 DOSTAWA 10 zł | OD 200 zł GRATIS 🔥</div><script>
+const phone="48694189888";
+const menuData = [
+
+["ZUPY",[
+["PHO Wołowina",25],
+["PHO Kurczak",25],
+["zupa tajka",15],
+["Zupa KREWETKI",17]
+]],
+
+["WOŁOWINA",[
+["Wołowina z warzywami",29],
+["Wołowina pikantna",29],
+["Wołowina curry",29],
+["Wołowina po tajsku",29],
+["Wołowina teriyaki",40]
+]],
+
+["KACZKA",[
+["Kaczka z warzywami",30],
+["Kaczka słodko-kwaśna",30],
+["Kaczka po tajsku",30],
+["Kaczka po chińsku",30],
+["Kaczka pekińska",35]
+]],
+
+["KURCZAK",[
+["Kurczak 5 smaków",25],
+["Kurczak pikantny",25],
+["Kurczak słodko-kwaśny",25],
+["Kurczak po tajsku",25],
+["Kurczak po wietnamsku",32]
+]],
+
+["KREWETKI",[
+["Krewetki z warzywami",30],
+["Krewetki pikantne",30],
+["Krewetki po tajsku",30],
+["Krewetki chrupiące",30],
+["Krewetki w cieście",30]
+]],
+
+["RYŻ SMAŻONY",[
+["Ryż smażony warzywa",24],
+["Ryż smażony kurczak",26],
+["Ryż smażony wołowina",28],
+["Ryż smażony krewetki",30]
+]],
+
+["PAD THAI",[
+["Pad Thai warzywa",27],
+["Pad Thai kurczak",29],
+["Pad Thai wołowina",30],
+["Pad Thai krewetki",32]
+]],
+
+["MAKARON UDON",[
+["Udon warzywa",25],
+["Udon kurczak",28],
+["Udon wołowina",30],
+["Udon krewetki",32]
+]],
+
+["MAKARON SOJOWY",[
+["Sojowy warzywa",25],
+["Sojowy kurczak",28],
+["Sojowy wołowina",30],
+["Sojowy krewetki",32]
+]],
+
+["MAKARON RYŻOWY",[
+["Ryżowy warzywa",25],
+["Ryżowy kurczak",28],
+["Ryżowy wołowina",30],
+["Ryżowy krewetki",32],
+["Ryżowy mango kurczak",28],
+["Ryżowy mango kaczka",30],
+["Ryżowy mango wołowina",32]
+]],
+
+["MAKARON CHIŃSKI",[
+["Chiński warzywa",25],
+["Chiński kurczak",28],
+["Chiński wołowina",30],
+["Chiński krewetki",32]
+]],
+
+["🔥 DANIA NA GORĄCEJ PŁYCIE",[
+["Kurczak z warzywami",30],
+["Schab po tajsku",32],
+["Wołowina po tajsku",35],
+["Krewetki chrupiące",35],
+["Udko po chińsku",31],
+["Wieprzowina po tajsku",31],
+["Kaczka pekińska",35],
+["Ryba po tajsku",32],
+["Kurczak po tajsku",30],
+["Krewetki po tajsku",38],
+["Kurczak po wietnamsku",32],
+["Wołowina teriyaki",40]
+]],
+
+["BOX",[
+["Box Bao Bao",22],
+["Kurczak z makaronem BOX",22]
+]],
+
+["DODATKI",[
+["Sajgonki",25],
+["Krewetki w cieście",30],
+["Ryż biały",5],
+["Makaron",6],
+["Sos dodatkowy",3]
+]]
+
+];
+
+
+const colors=["#ff3b3b","#ff9800","#ffd700","#00c853","#00bcd4","#e91e63"];
+
+let cart=[];
+let mode="dostawa";
+
+function start(type){
+mode=type;
+document.getElementById("intro").style.display="none";
+document.getElementById("menu").style.display="block";
+render();
+}
+
+function render(){
+let html="",tabs="";
+
+menuData.forEach((cat,i)=>{
+let color=colors[i%colors.length];
+
+tabs+=`<button style="background:${color}" onclick="go(${i})">${cat[0]}</button>`;
+
+html+=`<div id="cat${i}" class="category-box" style="border-color:${color}">
+<h3 style="color:${color}">${cat[0]}</h3>`;
+
+cat[1].forEach(item=>{
+html+=`
+<div class="item">
+<span>${item[0]}</span>
+<span>${item[1]} zł</span>
+<div class="qty">
+<button onclick="minus('${item[0]}')">-</button>
+<span id="q_${item[0]}">0</span>
+<button onclick="add('${item[0]}',${item[1]})">+</button>
+</div>
+</div>`;
+});
+
+html+="</div>";
+});
+
+document.getElementById("menu").innerHTML=html;
+document.getElementById("tabs").innerHTML=tabs;
+}
+
+function go(i){
+document.getElementById("cat"+i).scrollIntoView({behavior:"smooth"});
+}
+
+function add(name,price){
+let item=cart.find(i=>i.name===name);
+if(item){item.qty++;}
+else{cart.push({name,price,qty:1});}
+update();
+}
+
+function minus(name){
+let item=cart.find(i=>i.name===name);
+if(!item)return;
+item.qty--;
+if(item.qty<=0){
+cart=cart.filter(i=>i.name!==name);
+}
+update();
+}
+
+function update(){
+let total=0,count=0;
+
+cart.forEach(i=>{
+total+=i.price*i.qty;
+count+=i.qty;
+
+let el=document.getElementById("q_"+i.name);
+if(el) el.innerText=i.qty;
+});
+
+let box=count*1.5;
+let ship=(mode==="dostawa" && total<200)?10:0;
+
+let finalTotal=total+box+ship;
+
+document.getElementById("count").innerText=count;
+document.getElementById("total").innerText=finalTotal;
+
+renderCart();
+}
+
+function renderCart(){
+let html="";
+let total=0,count=0;
+
+cart.forEach(i=>{
+let sum=i.price*i.qty;
+total+=sum;
+count+=i.qty;
+
+html+=`<div class="cart-item">${i.name} x${i.qty} = ${sum} zł</div>`;
+});
+
+let box=count*1.5;
+let ship=(mode==="dostawa" && total<200)?10:0;
+
+html+=`<hr>
+<div>📦 Opakowanie: ${box.toFixed(2)} zł</div>
+<div>🚚 Dostawa: ${ship} zł</div>
+`;
+
+document.getElementById("cartItems").innerHTML=html;
+}
+
+function openCart(){
+document.getElementById("cartPopup").style.display="flex";
+}
+
+function closeCart(){
+document.getElementById("cartPopup").style.display="none";
+}
+
+function order(){
+let text="Zamówienie:%0A";
+
+cart.forEach(i=>{
+text+=`${i.name} x${i.qty}%0A`;
+});
+
+text+=`Tryb: ${mode}%0A`;
+text+=`Suma: ${document.getElementById("total").innerText} zł`;
+
+window.open(`https://wa.me/${phone}?text=${text}`);
+}
+</script></body>
+</html>
