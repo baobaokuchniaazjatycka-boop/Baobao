@@ -546,6 +546,34 @@ document.getElementById("cartPopup").style.display="none";
          "%0A%0ARazem: " + total + " zł";
 }
   
+function orderWhatsApp(){
+  if(cart.length===0){
+    alert("Chưa có món nào!");
+    return;
+  }
 
+  let text = getOrderText();
+  let url = "https://wa.me/" + phone + "?text=" + text;
+
+  window.open(url, "_blank");
+}
+
+function orderEmail(){
+  if(cart.length===0){
+    alert("Chưa có món nào!");
+    return;
+  }
+
+  let subject = "Zamówienie BAO BAO";
+
+  // FIX lỗi xuống dòng cho email
+  let body = getOrderText().replace(/%0A/g, "\n");
+
+  let mail = "mailto:baobaokuchniaazjatycka@gmail.com"
+           + "?subject=" + encodeURIComponent(subject)
+           + "&body=" + encodeURIComponent(body);
+
+  window.location.href = mail;
+  }
 </script></body>
 </html>
