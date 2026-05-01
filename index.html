@@ -526,16 +526,6 @@ function closeCart(){
 document.getElementById("cartPopup").style.display="none";
 }
   
-function getOrderText(){
-  let items = document.getElementById("cartItems").innerText;
-  let total = document.getElementById("total").innerText;
-  return "Zamówienie:%0A" + items + "%0A%0ARazem: " + total + " zł";
-}
-
-function orderWhatsApp(){
-  let text = getOrderText();
-  window.open("https://wa.me/48694189888?text=" + text, "_blank");
-}
 
 
   function getOrderText(){
