@@ -575,5 +575,14 @@ function orderEmail(){
 
   window.location.href = mail;
   }
+  function resetCart(){
+  cart=[];
+  update();
+
+  document.getElementById("name").value="";
+  document.getElementById("phone").value="";
+  document.getElementById("address").value="";
+  document.getElementById("note").value="";
+    }
 </script></body>
 </html>
