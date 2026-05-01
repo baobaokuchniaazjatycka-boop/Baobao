@@ -403,12 +403,15 @@ const colors=["#ff3b3b","#ff9800","#ffd700","#00c853","#00bcd4","#e91e63"];
 let cart=[];
 let mode="dostawa";
 
-function start(type){
-mode=type;
-document.getElementById("intro").style.display="none";
-document.getElementById("menu").style.display="block";
-render();
-}
+  function start(type){
+  mode=type;
+  document.getElementById("intro").style.display="none";
+  document.getElementById("menu").style.display="block";
+
+  document.getElementById("openCartBtn").style.display="block"; // 👈 thêm dòng này
+
+  render();
+  }
 
 function render(){
 let html="",tabs="";
