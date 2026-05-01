@@ -177,7 +177,15 @@ border-radius:10px;
 color:white;
 text-decoration:none;
 }
-
+.customer-form input,
+.customer-form textarea{
+  width:100%;
+  margin:5px 0;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+}
+  
   .order-btn{
   display:inline-block;
   padding:15px 25px;
@@ -226,6 +234,12 @@ text-decoration:none;
 <div class="cart-box">
 <h2>🛒 Twoje zamówienie</h2>
 <div id="cartItems"></div>
+  <div class="customer-form">
+  <input id="name" placeholder="👤 Imię (Tên)" required>
+  <input id="phone" placeholder="📞 Telefon">
+  <input id="address" placeholder="📍 Adres (Địa chỉ)">
+  <textarea id="note" placeholder="📝 Uwagi (Ghi chú)"></textarea>
+  </div>
 <b>Razem: <span id="total">0</span> zł</b><br><br>
 <button onclick="orderWhatsApp()">Zamów przez WhatsApp</button>
 
@@ -492,6 +506,23 @@ function orderEmail(){
     "mailto:baobaokuchniaazjatycka@gmail.com?subject=" +
     encodeURIComponent(subject) +
     "&body=" + encodeURIComponent(body);
+}
+  function getOrderText(){
+  let items = document.getElementById("cartItems").innerText;
+  let total = document.getElementById("total").innerText;
+
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+  let note = document.getElementById("note").value;
+
+  return "Zamówienie:%0A" +
+         items +
+         "%0A%0AImię: " + name +
+         "%0ATelefon: " + phone +
+         "%0AAdres: " + address +
+         "%0AUwagi: " + note +
+         "%0A%0ARazem: " + total + " zł";
 }
 </script></body>
 </html>
