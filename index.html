@@ -120,7 +120,15 @@ border-radius:10px;
 z-index:1000;
 animation:glow 2s infinite;
 }
+#openCartBtn{
+  animation: float 2s infinite ease-in-out;
+}
 
+@keyframes float{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+  }
 /* POPUP */
 #cartPopup{
 position:fixed;
